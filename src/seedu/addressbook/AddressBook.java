@@ -473,7 +473,7 @@ public class AddressBook {
      * @return set of keywords as specified by args
      */
     private static Set<String> extractKeywordsFromFindPersonArgs(String findPersonCommandArgs) {
-        return new HashSet<>(splitByWhitespace(findPersonCommandArgs.trim()));
+        return new HashSet<>(splitByWhitespaceAndConvertToLowerCase(findPersonCommandArgs.trim()));
     }
 
     /**
@@ -485,7 +485,7 @@ public class AddressBook {
     private static ArrayList<String[]> getPersonsWithNameContainingAnyKeyword(Collection<String> keywords) {
         final ArrayList<String[]> matchedPersons = new ArrayList<>();
         for (String[] person : getAllPersonsInAddressBook()) {
-            final Set<String> wordsInName = new HashSet<>(splitByWhitespace(getNameFromPerson(person)));
+            final Set<String> wordsInName = new HashSet<>(splitByWhitespaceAndConvertToLowerCase(getNameFromPerson(person)));
             if (!Collections.disjoint(wordsInName, keywords)) {
                 matchedPersons.add(person);
             }
@@ -1164,4 +1164,19 @@ public class AddressBook {
         return new ArrayList<>(Arrays.asList(toSplit.trim().split("\\s+")));
     }
 
+    /**
+     * Splits a source string into the list of substrings that were separated by whitespace
+     * and converted to lower case.
+     *
+     * @param toSplit source string
+     * @return split by whitespace and converted to lower case
+     */
+    private static ArrayList<String> splitByWhitespaceAndConvertToLowerCase(String toSplit) {
+        ArrayList<String> wordList = splitByWhitespace(toSplit);
+        ArrayList<String> lowerCaseConvertedWordList = new ArrayList<>();
+        for (String word : wordList) {
+            lowerCaseConvertedWordList.add(word.toLowerCase());
+        }
+        return lowerCaseConvertedWordList;
+    }
 }
